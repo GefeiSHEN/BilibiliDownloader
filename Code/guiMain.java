@@ -22,6 +22,8 @@ import javax.swing.JFileChooser;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.*;
 
@@ -390,5 +392,15 @@ public class guiMain extends JFrame implements ActionListener {
 		
 		File oldFile = new File(downloadDirectory,"/bilidown.flv");
 		System.out.println(oldFile.renameTo(new File(downloadDirectory,"/"+getTitle().trim()+getSubTitle(epi).trim()+".flv")));
+	}
+	
+	private static String replaceSpecStr(String orgStr){
+		if (null!=orgStr&&!"".equals(orgStr.trim())) {
+			String regEx="[\\s~·`!！@#￥$%^……&*（()）\\-——\\-_=+【\\[\\]】｛{}｝\\|、\\\\；;：:‘'“”\"，,《<。.》>、/？?]";
+			Pattern p = Pattern.compile(regEx);
+			Matcher m = p.matcher(orgStr);
+			return m.replaceAll("");
+		}
+		return null;
 	}
 }
