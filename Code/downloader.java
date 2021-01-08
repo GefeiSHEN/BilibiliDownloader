@@ -362,62 +362,78 @@ public class downloader{
 		}
 		if (vidUrl == null) vidUrl = new URL(qualityList.get(0).getVid());
 		audUrl = new URL(qualityList.get(0).getAud());
-
+	
 		int byteSum = 0;
 		int byteRead;
 	
-		try {
-            HttpURLConnection con = (HttpURLConnection) vidUrl.openConnection();
-            con.setRequestProperty("Host","upos-hz-mirrorakam.akamaized.net:443");
-            con.setRequestProperty("Connection","keep-alive");
-            con.setRequestProperty("User-Agent", new RandomUserAgent().getRandomUserAgent());
-            con.setRequestProperty("Referer", "https://www.bilibili.com/video/BV"+bv);
-            InputStream inStream = con.getInputStream();
-            FileOutputStream fs = new FileOutputStream(new File(downloadDirectory,"/bilidown.m4s"));
-            
-            System.out.println("Video Download Started");
-            
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((byteRead = inStream.read(buffer)) != -1) {
-                byteSum += byteRead;
-                fs.write(buffer, 0, byteRead);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-		
-		System.out.println("Video Download Successful");
-		
+		System.out.println("Video Download Started");
+		for (int i = 0; i < 3; i++) {
+			try {
+				HttpURLConnection con = (HttpURLConnection) vidUrl.openConnection();
+				con.setRequestProperty("Host","upos-hz-mirrorakam.akamaized.net:443");
+				con.setRequestProperty("Connection","keep-alive");
+				con.setRequestProperty("User-Agent", new RandomUserAgent().getRandomUserAgent());
+				con.setRequestProperty("Referer", "https://www.bilibili.com/video/BV"+bv);
+				InputStream inStream = con.getInputStream();
+				FileOutputStream fs = new FileOutputStream(new File(downloadDirectory,"bilidown.m4s"));
+				
+				long tot_len;
+				tot_len = con.getContentLengthLong();
+				
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((byteRead = inStream.read(buffer)) != -1) {
+					byteSum += byteRead;
+					fs.write(buffer, 0, byteRead);
+					System.out.printf("%.2fMib / %.2fMib, %.2f%%\r",
+							byteSum * 1.0 / 1024 / 1024, tot_len * 1.0 / 1024 / 1024, byteSum * 1.0 / tot_len * 100);
+				}
+				System.out.println("\nVideo Download Successful");
+				break;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println("\nVideo Download Attempt " + i + "/3 Failed.");
+			if (i == 2) System.out.println("\nVideo Download Attempt Failed too many times.");
+		}
+	
 		byteSum = 0;
 	
-		try {
-            HttpURLConnection con = (HttpURLConnection) audUrl.openConnection();
-            con.setRequestProperty("Host","upos-hz-mirrorakam.akamaized.net:443");
-            con.setRequestProperty("Connection","keep-alive");
-            con.setRequestProperty("User-Agent", new RandomUserAgent().getRandomUserAgent());
-            con.setRequestProperty("Referer", "https://www.bilibili.com/video/BV"+bv);
-            InputStream inStream = con.getInputStream();
-            FileOutputStream fs = new FileOutputStream(new File(downloadDirectory,"/bilidown.mp3"));
-            
-            System.out.println("Audio Download Started");
-            
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((byteRead = inStream.read(buffer)) != -1) {
-                byteSum += byteRead;
-                fs.write(buffer, 0, byteRead);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-		
-		System.out.println("Audio Download Successful");
-
+		System.out.println("Audio Download Started");
+		for (int i = 0; i < 3; i++) {
+			try {
+				HttpURLConnection con = (HttpURLConnection) audUrl.openConnection();
+				con.setRequestProperty("Host","upos-hz-mirrorakam.akamaized.net:443");
+				con.setRequestProperty("Connection","keep-alive");
+				con.setRequestProperty("User-Agent", new RandomUserAgent().getRandomUserAgent());
+				con.setRequestProperty("Referer", "https://www.bilibili.com/video/BV"+bv);
+				InputStream inStream = con.getInputStream();
+				FileOutputStream fs = new FileOutputStream(new File(downloadDirectory,"bilidown.mp3"));
+				
+				long tot_len;
+				tot_len = con.getContentLengthLong();
+				
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((byteRead = inStream.read(buffer)) != -1) {
+					byteSum += byteRead;
+					fs.write(buffer, 0, byteRead);
+					System.out.printf("%.2fMib / %.2fMib, %.2f%%\r",
+							byteSum * 1.0 / 1024 / 1024, tot_len * 1.0 / 1024 / 1024, byteSum * 1.0 / tot_len * 100);
+				}
+				System.out.println("\nAudio Download Successful");
+				break;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println("\nAudio Download Attempt " + i + "/3 Failed.");
+			if (i == 2) System.out.println("\nAudio Download Attempt Failed too many times.");
+		}
+	
 		try {
 			merge(epi,downloadDirectory);
 		} catch (InterruptedException e) {
