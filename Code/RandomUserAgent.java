@@ -1,3 +1,10 @@
+/*
+ * 作者： mkstayalive
+ * Author: mkstayalive
+ * 
+ * Github链接：https://github.com/mkstayalive/random-user-agent-java
+ * Link to Github Repository: https://github.com/mkstaya live/random-user-agent-java
+ */
 package bilibiliDownloader;
 
 
