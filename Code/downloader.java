@@ -430,20 +430,20 @@ public class downloader{
 		this.downloadDirectory = downloadDirectory;
 		Runtime rt = Runtime.getRuntime();
 		try {
-			System.out.println("ffmpeg -i "+downloadDirectory.toString()+"\\bilidown.m4s -i "+downloadDirectory.toString()+
-					"\\bilidown.mp3 -c:v copy -c:a aac "+downloadDirectory.toString()+"\\"+getChinese(getTitle().trim())
+			System.out.println("ffmpeg -i "+downloadDirectory.toString()+ File.separator +"bilidown.m4s -i "+downloadDirectory.toString()+
+					File.separator + "bilidown.mp3 -c:v copy -c:a aac "+downloadDirectory.toString() + File.separator + getChinese(getTitle().trim())
 					+epi+getSubTitle(epi)+".mp4");
 			List<String> comm = new LinkedList<String>();
 			comm.add("ffmpeg");
 			comm.add("-i");
-			comm.add(downloadDirectory.toString()+"\\bilidown.m4s");
+			comm.add(downloadDirectory.toString()+ File.separator + "bilidown.m4s");
 			comm.add("-i");
-			comm.add(downloadDirectory.toString()+"\\bilidown.mp3");
+			comm.add(downloadDirectory.toString()+ File.separator + "bilidown.mp3");
 			comm.add("-c:v");
 			comm.add("copy");
 			comm.add("-c:a");
 			comm.add("aac");
-			comm.add(downloadDirectory.toString()+"\\"+"["+getAuthor()+"]"+getChinese(getTitle().trim())+"_"+getChinese(getSubTitle(epi))+".mp4");
+			comm.add(downloadDirectory.toString()+File.separator+"["+getAuthor()+"]"+getChinese(getTitle().trim())+"_"+getChinese(getSubTitle(epi))+".mp4");
 			ProcessBuilder builder = new ProcessBuilder(comm);
 			builder.directory(downloadDirectory);
 			builder.redirectErrorStream(true);
